@@ -1,31 +1,33 @@
-# Eisenstein's criterion in Rust
-This is an implementation of Eisenstein's criterion from scratch in Rust. 
+# Eisenstein's criterion
+This is an implementation of applying Eisenstein's criterion to randomly generated polynomials over $Q$
 
-# Irreducibility tests
-Irreducibile polynomials are important for constructing finite fields. (Read [these notes](https://github.com/a-rust/constructing-finite-fields) I wrote about constructing finite fields from qoutient rings). There are many tests to determine whether a given polynomial is irreducible or not. Some of the tests depend on the field of coefficients; for example, Eisenstein's criterion (E.C).
+Irreducibile polynomials are important for constructing finite fields (here are [some notes](https://github.com/a-rust/constructing-finite-fields) I wrote about constructing finite fields from irreducible polynomials). There are many tests to see if a given polynomial is irreducible over some field $F$. Eisenstein's criterion determines if a polynomial with integer coefficients is irreducible over $Q$.
 
-## Theorem:
-E.C. states the following:
-
+## Theorem
 Consider the polynomial $p(x) = a_0 + a_1(x) + a_2(x^2) + ... + a_n(x^n)$ where $a_i \in Q$.
 
-If there exists a prime number $p$ such that:
-1. for $0 \leq i < n$, $p$ divides $a_i$
+Eisenstein's criterion states that $p(x)$ is irreducible over $Q$ if there exists a prime number $p\in Z$ such that:
+1. $p$ divides each $a_i$ for $0 \leq i < n$,
 2. $p$ does not divide $a_n$
-3. $p^2$ does not divide $a_0$,
+3. $p^2$ does not divide $a_0$
 
-then $p(x)$ is irreducible over $Q$.
+* Note that some polynomials do not directly satisfy Eisenstein's criterion, but can be transformed into a new polynomail that does satisfy Eisenstein's criterion; the original polynomial "indirectly" satisfies Eisenstein's criterion, and is thus irreducible.
 
-Note that this does not state that if a polynomial $p(x)$ over $Q$ does not satisfy E.C., then it is not irreducible over $Q$; consider $x^2 - 1 = (x + 1)(x - 1)$.
+Check out https://en.wikipedia.org/wiki/Eisenstein's_criterion for more details.
 
-For more information, check out the [wikipedia page](https://en.wikipedia.org/wiki/Eisenstein's_criterion)
+## Running
+~~~
+git clone https://github.com/a-rust/eisensteins-criterion.git
+cd eisensteins-criterion
+cargo run
+~~~
 
-# Running the code:
-The program takes a randomly generated polynomial, and determines if it satisfies E.C. 
-
-The user is given a choice to set the degree of the polynomial, or let it be chosen randomly from 2-10. The lower bound is 2 because irreducible polynomials, by definition, must be of at least degree 2.
-
-Generally speaking, higher degree randomly generated polynomials will be less likely to satisfy E.C., due to the first condition of E.C. being more difficult to satisfy as the degree (randomly) increases.
-So setting the degree anywhere from 2-10 is best to get a feel for how E.C works.
-
-The user is also given a choice to set the upper bound on the rng of all coefficients, from 1 - $n$, or let it default to $100$. Unlike the degree, setting this upper bound for all coefficients to be higher grants more opportunity for that a potential $p$ satsfying E.C. does in fact exist, generally speaking.
+## Setup
+* The program takes a randomly generated polynomial, and determines if it directly satisfies Eisenstein's criterion.
+* The user is given a choice to set the degree $n$ of $p(x)$, or default to a random $2\leq n\leq 10$. 
+  * $2\leq n$ because irreducible polynomials, by definition, must be of at least degree 2.
+* Generally speaking, randomly generated polynomials of higher degree will be less likely to satisfy Eisenstein's criterion.
+  * The first condition requires a lot.
+  * Observation: setting $n\leq 4$ is best to get a feel for how Eisenstein's criterion works.
+* The user is also given a choice to set the upper bound on the random number generator for the coefficients of $p(x)$, or default to $100$. 
+  * Intuitively, a higher upper bound should grant more opportunity for potential $p$'s to satisfy all three conditions.
