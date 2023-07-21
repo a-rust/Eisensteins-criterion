@@ -1,7 +1,7 @@
 use rand::Rng;
 use std::io;
 
-//Giving the user the option to set the degree of the polynomial
+// Function that sets the degree of the randomly generated polynomial
 pub fn choose_degree() -> i32 {
     let mut input = String::new();
     println!(
@@ -9,7 +9,6 @@ pub fn choose_degree() -> i32 {
 of the polynomial, or enter x to generate 
 a random degree from 1-10."
     );
-
     io::stdin().read_line(&mut input);
     if input.trim() == "x" {
         let rand_deg = gen_degree();
@@ -23,7 +22,7 @@ a random degree from 1-10."
         return degree;
     }
 }
-//Giving the user the option to set the upper bound on the rng for the coefficients of the polynomial.
+// Function that sets the upper bound of the coefficients for the polynomial
 pub fn choose_upper_bound() -> i32 {
     println!(
         "Please choose the upper bound 
@@ -45,7 +44,7 @@ or enter x set the default to 100."
     }
 }
 
-//Generating the degree if the user does not want to set it themselves.
+// Function that sets a random degree if the user doesn't explicitly give a value
 pub fn gen_degree() -> i32 {
     let mut degree = rand::thread_rng();
     let set_degree: i32 = degree.gen_range(2..10);
@@ -53,7 +52,7 @@ pub fn gen_degree() -> i32 {
     set_degree
 }
 
-//Randomly generating the n coefficients of p(x) into a vector
+// Function that returns the coefficients of the randomly generated polynomial as a vector
 pub fn gen_polynomial(deg: i32, upper_bound: i32) -> Vec<i32> {
     let mut vec_of_coef: Vec<i32> = Vec::<i32>::new();
     for _i in 1..deg + 1 {
@@ -78,7 +77,7 @@ pub fn get_highest_coef(full_vec: Vec<i32>) -> i32 {
     return initial_highest_coef;
 }
 
-//Creating a vector of first n-1 coefficients of p(x)
+// Getter method that returns a vector of the first n-1 coefficients of p(x)
 pub fn first_n_minus_one_coef(full_vec: Vec<i32>, deg: i32) -> Vec<i32> {
     let middle_coef: Vec<i32> = full_vec
         .clone()
