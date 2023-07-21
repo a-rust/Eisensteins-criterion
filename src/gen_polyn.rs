@@ -1,5 +1,6 @@
 use rand::Rng;
 use std::io;
+
 //Giving the user the option to set the degree of the polynomial
 pub fn choose_degree() -> i32 {
     let mut input = String::new();
@@ -64,6 +65,17 @@ pub fn gen_polynomial(deg: i32, upper_bound: i32) -> Vec<i32> {
         vec_of_coef
     );
     vec_of_coef
+}
+
+// Getter method that returns the highest coefficient within the vector of coefficients
+pub fn get_highest_coef(full_vec: Vec<i32>) -> i32 {
+    let mut initial_highest_coef: i32 = full_vec[0];
+    for i in 1..full_vec.len() {
+        if i > (initial_highest_coef as usize) {
+                initial_highest_coef = full_vec[i];
+            }
+    }
+    return initial_highest_coef;
 }
 
 //Creating a vector of first n-1 coefficients of p(x)

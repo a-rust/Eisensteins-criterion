@@ -1,27 +1,33 @@
-//Algorithm to check which prime numbers, if any, divide the first //n-1 elements of p(x). This tells us if p(x) satisfies the first condition of Eisenstien's criterion.
+use crate::gen_polyn::get_highest_coef;
 
-//Finding prime number within given range of possible coefficients
-fn _finding_primes() -> Vec<i32> {
-    let possible: Vec<i32> = (1..=20).collect();
-    let mut known: Vec<i32> = Vec::new();
-    for i in possible {
+
+
+/// Finding all prime numbers within a given range of possible coefficients
+/// We only need to check these prime numbers moving forward
+fn _get_primes_within_poly(highest_coef: i32) -> Vec<i32> {
+    let poly_coef_range: Vec<i32> = (1..=highest_coef).collect();
+    let mut primes: Vec<i32> = Vec::new();
+    // Logic for finding all primes within the range (1, highest_coef]
+    for i in poly_coef_range {
         for j in 2..i + 1 {
             if j == i {
-                known.push(i);
+                primes.push(i);
             }
             if i % j == 0 {
                 break;
             }
         }
     }
-    known
+    primes
 }
+
 fn _first_condition(middle: Vec<i32>) -> Vec<i32> {
     let mut prime_divisors = Vec::<i32>::new();
-    let known_primes = _finding_primes();
+    let highest_coef = get_highest_coef(middle.clone());
+    let primes_within_coef = _get_primes_within_poly(highest_coef);
     //The counter makes sure that in the case that the last j does satisfy the if statement, must also check to see if the current i divides every other j prior.
     let mut counter: i32 = 0;
-    for i in known_primes {
+    for i in primes_within_coef {
         for j in middle.clone() {
             if j % i == 0 {
                 counter += 1;
@@ -30,7 +36,7 @@ fn _first_condition(middle: Vec<i32>) -> Vec<i32> {
         if counter as usize == middle.iter().len() {
             prime_divisors.push(i);
         }
-        //Resetting counter for next i
+        // Resetting counter for next i
         counter = 0;
     }
     println!(
@@ -41,7 +47,7 @@ coefficient (excluding a_n): {:?}",
     prime_divisors
 }
 
-//Algorithm to check if any element of the vector ouput from
+// Algorithm to check if any element of the vector ouput from
 //_first_condition divides a_n. If yes, Eisenstien's criterion
 //doesn't satisfy the second condition
 fn _second_condition(full_vec: Vec<i32>, prime_divisors: Vec<i32>) -> bool {
