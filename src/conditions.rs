@@ -21,11 +21,12 @@ fn _get_primes_within_poly(highest_coef: i32) -> Vec<i32> {
     primes
 }
 
+// Function that determines if the randomly generated polynomial satisfies the first element of E.C (i.e., the first n-1 coefficients are all divisible by some common prime number)
 fn _first_condition(middle: Vec<i32>) -> Vec<i32> {
     let mut prime_divisors = Vec::<i32>::new();
     let highest_coef = get_highest_coef(middle.clone());
     let primes_within_coef = _get_primes_within_poly(highest_coef);
-    //The counter makes sure that in the case that the last j does satisfy the if statement, must also check to see if the current i divides every other j prior.
+    // The counter is used to verify that all elements in middle are divisible by some prime i in primes_within_coef. If so, push i to prime_divisors
     let mut counter: i32 = 0;
     for i in primes_within_coef {
         for j in middle.clone() {
@@ -36,7 +37,7 @@ fn _first_condition(middle: Vec<i32>) -> Vec<i32> {
         if counter as usize == middle.iter().len() {
             prime_divisors.push(i);
         }
-        // Resetting counter for next i
+        // Resetting counter for next prime i
         counter = 0;
     }
     println!(
@@ -48,7 +49,7 @@ coefficient (excluding a_n): {:?}",
 }
 
 // Algorithm to check if any element of the vector ouput from
-//_first_condition divides a_n. If yes, Eisenstien's criterion
+// _first_condition divides a_n. If yes, Eisenstien's criterion
 //doesn't satisfy the second condition
 fn _second_condition(full_vec: Vec<i32>, prime_divisors: Vec<i32>) -> bool {
     let mut divisors_of_a_n: Vec<i32> = Vec::new();
