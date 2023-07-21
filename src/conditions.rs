@@ -1,7 +1,5 @@
 use crate::gen_polyn::get_highest_coef;
 
-
-
 /// Finding all prime numbers within a given range of possible coefficients
 /// We only need to check these prime numbers moving forward
 fn _get_primes_within_poly(highest_coef: i32) -> Vec<i32> {
@@ -48,59 +46,50 @@ coefficient (excluding a_n): {:?}",
     prime_divisors
 }
 
-// Algorithm to check if any element of the vector ouput from
-// _first_condition divides a_n. If yes, Eisenstien's criterion
-//doesn't satisfy the second condition
-fn _second_condition(full_vec: Vec<i32>, prime_divisors: Vec<i32>) -> bool {
-    let mut divisors_of_a_n: Vec<i32> = Vec::new();
+// Function that returns a sub-vector of elements from prime_divisors such that every i in the sub-vector does not divide the highest degree coefficient of full_vec (i.e., a_n)
+// This sub-vector will be used to check the second condition of E.C.
+fn _second_condition(full_vec: Vec<i32>, prime_divisors: Vec<i32>) -> Vec<i32> {
+    let mut non_divisors_of_a_n: Vec<i32> = Vec::new();
     for i in prime_divisors {
-        if full_vec.last().unwrap() % i == 0 {
-            divisors_of_a_n.push(i);
+        if full_vec.last().unwrap() % i != 0 {
+            non_divisors_of_a_n.push(i);
         }
     }
-    if divisors_of_a_n.is_empty() {
-        return true;
-    } else {
-        return false;
-    }
+    return non_divisors_of_a_n
 }
 
-//Algorithm to check if the square of any element from the vector
-//output of _first_condition divides a_0. If yes, Eisenstien's
-//crtierion doesn't satisfy the last condition.
-fn _third_condition(full_vec: Vec<i32>, prime_divisors: Vec<i32>) -> bool {
+// Function that returns a sub-vector of elements from prime_divisors such that the square of every i in the sub_vector does not divide the lowest degree coefficient of full_vec (i.e., a_0)
+// This sub-vector will be used to check the third condition of E.C.
+fn _third_condition(full_vec: Vec<i32>, prime_divisors: Vec<i32>) -> Vec<i32> {
     let mut squared_divisors: Vec<i32> = Vec::new();
     for i in prime_divisors {
-        if full_vec.first().unwrap() % i ^ 2 == 0 {
+        if full_vec.first().unwrap() % (i ^ 2) == 0 {
             squared_divisors.push(i);
         }
     }
-    if squared_divisors.is_empty() {
-        return true;
-    } else {
-        return false;
-    }
+    return squared_divisors;
 }
 
-//Algorithm to check whether a randomly generated polynomial satisfies Eisenstien's criterion.
-pub fn check_conditions(full_vec: Vec<i32>, smaller_vec: Vec<i32>) {
-    let divisors = _first_condition(smaller_vec.clone());
-    if divisors.is_empty() {
+// Function to check whether full_vec satisfies all 3 conditions of E.C.
+pub fn check_conditions(full_vec: Vec<i32>, middle_vec: Vec<i32>) {
+    let prime_divisors: Vec<i32> = _first_condition(middle_vec.clone());
+    if prime_divisors.is_empty() {
         println!("Did not pass the first condition; fails E.C.");
         return;
     } else {
         println!("Passed the first condition.");
-        if _second_condition(full_vec.clone(), divisors.clone()) == true {
-            println!("Passed the second condition.");
-            if _third_condition(full_vec, divisors) == true {
-                println!("Passed all three conditions; satisfies E.C.")
-            } else {
-                println!("Did not pass the third condition; fails E.C.");
-                return;
-            }
-        } else {
+        let second_cond_vec: Vec<i32> = _second_condition(full_vec.clone(), prime_divisors.clone());
+        if second_cond_vec.is_empty() {
             println!("Did not pass the second condition; fails E.C.");
-            return;
+        } else {
+            println!("Passed the second condition.");
+            let third_cond_vec: Vec<i32> = _third_condition(full_vec, prime_divisors.clone());
+            if third_cond_vec.is_empty() {
+                println!("Did not pass the third condition; fails E.C.");
+            }
+            else {
+                println!("Passed all three conditions; satisfies E.C.")
+            }
         }
     }
 }
