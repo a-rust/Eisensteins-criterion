@@ -112,4 +112,20 @@ mod tests {
         // First condition returns a set of candidate primes that satisfy the first condition
         assert_eq!(first_condition(&vec![2, 3, 8], &vec![11, 12, 13]), vec![]);
     }
+
+    #[test]
+    // Case 1: at least one remaining candidate passes the second condition
+    fn test_pass_second_condition() {
+        // First parameter is set of candidate primes that passed the first condition, second parameter is coefficients of polynomial
+        // Second condition returns a set of candidate primes that satisfy the first and second conditions
+        assert_eq!(second_condition(&vec![2], &vec![34, 38, 93]), vec![2])
+    }
+
+    #[test]
+    // Case 2: no remaining candidate passes the second condition
+    fn test_fail_second_condition() {
+        // First parameter is set of candidate primes that passed the first condition, second parameter is coefficients of polynomial
+        // Second condition returns a set of candidate primes that satisfy the first and second conditions
+        assert_eq!(second_condition(&vec![3], &vec![33, 66, 93]), vec![])
+    }
 }
