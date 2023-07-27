@@ -47,7 +47,7 @@ pub fn first_condition(prime_candidates: &Vec<i32>, full_vec: &Vec<i32>) -> Vec<
 
 // Function that returns a sub-vector of elements from prime_divisors such that every i in the sub-vector does not divide the highest degree coefficient of full_vec (i.e., a_n)
 // This sub-vector will be used to check the second condition of E.C.
-pub fn second_condition(full_vec: &Vec<i32>, first_condition_candidates: &Vec<i32>) -> Vec<i32> {
+pub fn second_condition(first_condition_candidates: &Vec<i32>, full_vec: &Vec<i32>) -> Vec<i32> {
     let mut second_condition_candidates: Vec<i32> = Vec::new();
     for i in first_condition_candidates {
         if full_vec.last().unwrap() % i != 0 {
@@ -60,7 +60,7 @@ pub fn second_condition(full_vec: &Vec<i32>, first_condition_candidates: &Vec<i3
 
 // Function that returns a sub-vector of elements from prime_divisors such that the square of every i in the sub_vector does not divide the lowest degree coefficient of full_vec (i.e., a_0)
 // This sub-vector will be used to check the third condition of E.C.
-pub fn third_condition(full_vec: &Vec<i32>, second_condition_candidates: &Vec<i32>) -> Vec<i32> {
+pub fn third_condition(second_condition_candidates: &Vec<i32>, full_vec: &Vec<i32>) -> Vec<i32> {
     let a_0 = full_vec[0];
     let mut final_candidates: Vec<i32> = Vec::new();
     for i in second_condition_candidates {
@@ -74,10 +74,42 @@ pub fn third_condition(full_vec: &Vec<i32>, second_condition_candidates: &Vec<i3
 }
 
 // Function to check whether full_vec satisfies all 3 conditions of E.C.
-pub fn check_conditions(final_candidates: &Vec<i32>) {
+pub fn check_conditions(final_candidates: &Vec<i32>) -> bool {
     if !final_candidates.is_empty() {
         println!("Passed all three conditions; satisfies E.C.");
+        return true;
     } else {
         println!("Try another polynomial!");
+        return false;
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+
+    use std::vec;
+
+    use super::*;
+
+    #[test]
+    fn test_get_primes_within_poly() {
+        assert_eq!(get_primes_within_poly(20), vec![2, 3, 5, 7, 11, 13, 17, 19])
+    }
+
+    #[test]
+    // Case 1: at least one candidate passes the first condition
+    fn test_pass_first_condition() {
+        // First parameter is set of candidate primes, second parameter is coefficients of polynomial
+        // First condition returns a set of candidate primes that satisfy the first condition
+        assert_eq!(first_condition(&vec![2, 3, 8], &vec![6, 18, 100]), vec![2, 3]);
+    }
+
+    #[test]
+    // Case 2: no candidate passes the first condition
+    fn test_fail_first_condition() {
+        // First parameter is set of candidate primes, second parameter is coefficients of polynomial
+        // First condition returns a set of candidate primes that satisfy the first condition
+        assert_eq!(first_condition(&vec![2, 3, 8], &vec![11, 12, 13]), vec![]);
     }
 }
