@@ -65,7 +65,7 @@ pub fn third_condition(second_condition_candidates: &Vec<i32>, full_vec: &Vec<i3
     let mut final_candidates: Vec<i32> = Vec::new();
     for i in second_condition_candidates {
         let prime_squared: i32 = i.pow(2);
-        if a_0 % prime_squared == 0 {
+        if a_0 % prime_squared != 0 {
             final_candidates.push(*i);
         }
     }
@@ -103,6 +103,7 @@ mod tests {
         // First parameter is set of candidate primes, second parameter is coefficients of polynomial
         // First condition returns a set of candidate primes that satisfy the first condition
         assert_eq!(first_condition(&vec![2, 3, 8], &vec![6, 18, 100]), vec![2, 3]);
+        // Passes first condition because 2 and 3 divide both 6 and 18
     }
 
     #[test]
@@ -111,6 +112,7 @@ mod tests {
         // First parameter is set of candidate primes, second parameter is coefficients of polynomial
         // First condition returns a set of candidate primes that satisfy the first condition
         assert_eq!(first_condition(&vec![2, 3, 8], &vec![11, 12, 13]), vec![]);
+        // Fails first condition because no element of [2, 3, 8] divides both 11 and 12
     }
 
     #[test]
@@ -119,6 +121,7 @@ mod tests {
         // First parameter is set of candidate primes that passed the first condition, second parameter is coefficients of polynomial
         // Second condition returns a set of candidate primes that satisfy the first and second conditions
         assert_eq!(second_condition(&vec![2], &vec![34, 38, 93]), vec![2])
+        // Passes second condition because 2 does not divide a_n = 93
     }
 
     #[test]
@@ -127,5 +130,24 @@ mod tests {
         // First parameter is set of candidate primes that passed the first condition, second parameter is coefficients of polynomial
         // Second condition returns a set of candidate primes that satisfy the first and second conditions
         assert_eq!(second_condition(&vec![3], &vec![33, 66, 93]), vec![])
+        // Fails second condition because 3 divides a_n = 93
+    }
+
+    #[test]
+    // Case 1: at least one remaining candidate passes the third condition
+    fn test_pass_third_condition() {
+        // First parameter is set of candidate primes that passed the first and second condition, second parameter is coefficients of polynomial
+        // Third condition returns a set of candidate primes that satisfy the first, second, and third conditions
+        assert_eq!(third_condition(&vec![2], &vec![34, 38, 93]), vec![2])
+        // Passes third condition because 2^2 = 4 does not divide a_0 = 34
+    }
+
+    #[test]
+    // Case 2: no remaining candidate passes the third condition
+    fn test_fail_third_condition() {
+        // First parameter is set of candidate primes that passed the first and second condition, second parameter is coefficients of polynomial
+        // Third condition returns a set of candidate primes that satisfy the first, second, and third conditions
+        assert_eq!(third_condition(&vec![3], &vec![81, 33, 92]), vec![])
+        // Fails third condition because 3^3 = 9 divides a_0 = 81
     }
 }
