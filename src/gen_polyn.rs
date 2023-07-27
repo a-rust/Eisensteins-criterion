@@ -55,35 +55,23 @@ pub fn gen_degree() -> i32 {
 // Function that returns the coefficients of the randomly generated polynomial as a vector
 pub fn gen_polynomial(deg: i32, upper_bound: i32) -> Vec<i32> {
     let mut vec_of_coef: Vec<i32> = Vec::<i32>::new();
-    for _i in 1..deg + 1 {
+    for _i in 1..deg + 2 {
         vec_of_coef.push(rand::thread_rng().gen_range(1..upper_bound));
     }
     println!(
-        "Polynomial coefficients (a_0, a_1, ... , a_n): 
-{:?}",
-        vec_of_coef
+        "Polynomial coefficients (a_0X + a_1X + ... + a_{}X): 
+{:?}", deg, vec_of_coef
     );
     vec_of_coef
 }
 
 // Getter method that returns the highest coefficient within the vector of coefficients
-pub fn get_highest_coef(full_vec: Vec<i32>) -> i32 {
+pub fn get_highest_coef(full_vec: &Vec<i32>) -> i32 {
     let mut initial_highest_coef: i32 = full_vec[0];
     for i in 1..full_vec.len() {
-        if i > (initial_highest_coef as usize) {
+        if full_vec[i] > (initial_highest_coef) {
                 initial_highest_coef = full_vec[i];
             }
     }
     return initial_highest_coef;
-}
-
-// Getter method that returns a vector of the first n-1 coefficients of p(x)
-pub fn first_n_minus_one_coef(full_vec: Vec<i32>, deg: i32) -> Vec<i32> {
-    let middle_coef: Vec<i32> = full_vec
-        .clone()
-        .into_iter()
-        .take(deg as usize - 1)
-        .collect();
-    println!("First n-1 coefficients: {:?}", middle_coef);
-    middle_coef
 }
