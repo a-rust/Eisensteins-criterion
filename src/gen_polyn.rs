@@ -75,3 +75,14 @@ pub fn get_highest_coef(full_vec: &Vec<i32>) -> i32 {
     }
     return initial_highest_coef;
 }
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn test_get_highest_coef() {
+        assert_eq!(get_highest_coef(&vec![-100, -10, 0, 20, 30, 40, 99]), 99);
+    }
+}
